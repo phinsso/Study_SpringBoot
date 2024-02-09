@@ -14,4 +14,10 @@ public class FirstController {
         model.addAttribute("username", "승호");
         return "greetings"; // 서버가 알아서 templates 디렉토리에서 greetings.mustache 파일을 찾아 웹 브라우저로 전송
     }
+
+    @GetMapping("/bye")
+    public String SeeYouNext(Model model) {
+        model.addAttribute("nickname", "승호");
+        return "goodbye";
+    }
 }
