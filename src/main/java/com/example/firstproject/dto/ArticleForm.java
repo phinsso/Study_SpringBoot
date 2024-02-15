@@ -8,10 +8,11 @@ import lombok.ToString;
 @AllArgsConstructor // 클래스 안쪽의 모든 필드를 매개변수로 하는 생성자 자동 생성
 @ToString // toString() 메서드를 사용하는 것과 같은 효과
 public class ArticleForm {
+    private Long id; // id 필드
     private String title; // 제목을 받을 필드
     private String content; // 내용을 받을 필드
 
     public Article toEntity() {
-        return new Article(null, title, content);
+        return new Article(id, title, content);
     }
 }
