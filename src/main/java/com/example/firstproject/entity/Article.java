@@ -19,4 +19,12 @@ public class Article {
     private String title;
     @Column // content 필드 선언 (db 테이블의 content 열과 연결됨)
     private String content;
+
+    // 일부 데이터 수정 시, 기존 값이 날아가는 현상 방지를 위한 메서드
+    public void patch(Article article) {
+        if(article.title != null)
+            this.title = article.title;
+        if(article.content != null)
+            this.content = article.content;
+    }
 }
