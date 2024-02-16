@@ -19,6 +19,11 @@ public class MemberController {
     @Autowired
     MemberRepository memberRepository;
 
+    @GetMapping("/members/new")
+    public String newMemberForm() {
+        return "members/new";
+    }
+
     @GetMapping("/signup")
     public String signUpPage() {
         return "members/new";
@@ -36,10 +41,10 @@ public class MemberController {
         Member saved = memberRepository.save(member);
         log.info(saved.toString());
 
-        return "";
+        return "redirect:/members/" + saved.getId();
     }
 
-    @GetMapping("/members")
+    @GetMapping("/members/{id}")
     public String show(@PathVariable Long id, Model model) {
         // 1. id 조회해 데이터 가져오기
         Member memberEntity = memberRepository.findById(id).orElse(null);
@@ -52,7 +57,7 @@ public class MemberController {
     @GetMapping("/members")
     public String index(Model model) {
         List<Member> memberEntityList = memberRepository.findAll();
-        model.addAttribute("member", memberEntityList);
+        model.addAttribute("members", memberEntityList);
         return "members/index";
     }
 }
