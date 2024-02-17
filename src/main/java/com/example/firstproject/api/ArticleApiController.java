@@ -32,14 +32,15 @@ public class ArticleApiController {
         return articleService.show(id);
     }
 
-    /*
     // POST (생성)
     @PostMapping("api/articles")
-    public Article create(@RequestBody ArticleForm dto) {
-        Article article = dto.toEntity();
-        return articleRepository.save(article);
+    public ResponseEntity<Article> create(@RequestBody ArticleForm dto) { // 반환형 수정
+        Article created = articleService.create(dto);
+        return (created != null) ? // 생성이 되면 정상, 실패하면 오류 응답
+                ResponseEntity.status(HttpStatus.OK).body(created) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
+    /*
     // PATCH (수정)
     @PatchMapping("api/articles/{id}")
     // 매개변수로 요청 url의 id 와 요청 메세지의 본문 데이터 받아오기
