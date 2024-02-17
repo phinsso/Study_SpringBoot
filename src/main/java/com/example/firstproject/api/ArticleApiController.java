@@ -3,6 +3,7 @@ package com.example.firstproject.api;
 import com.example.firstproject.dto.ArticleForm;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
+import com.example.firstproject.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,21 +17,22 @@ import java.util.List;
 @RestController
 public class ArticleApiController {
     @Autowired
-    private ArticleRepository articleRepository; // 게시글 리파지터리 주입
+    private ArticleService articleService; // 서비스 객체 주입
 
     // GET (조회)
     // 모든 게시글 조회
     @GetMapping("api/articles")
     public List<Article> index() {
-        return articleRepository.findAll();
+        return articleService.index();
     }
 
     // 단일 게시글 조회
     @GetMapping("api/articles/{id}")
     public Article show(@PathVariable Long id) {
-        return articleRepository.findById(id).orElse(null);
+        return articleService.show(id);
     }
 
+    /*
     // POST (생성)
     @PostMapping("api/articles")
     public Article create(@RequestBody ArticleForm dto) {
@@ -81,5 +83,6 @@ public class ArticleApiController {
         // build(): body가 없는 ResponseEntity 객체 생성 (== body(null))
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+     */
 
 }
