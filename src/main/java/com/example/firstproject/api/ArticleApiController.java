@@ -62,4 +62,13 @@ public class ArticleApiController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 삭제하지 못함
     }
 
+    @PostMapping("api/transaction-test") // 여러 게시글 생성 요청 접수
+    public ResponseEntity<List<Article>> transactionTest // 상태 코드도 함께 보내므로 반환형에 ResponseEntity도 붙임
+            (@RequestBody List<ArticleForm> dtos) { // ArticleForm 데이터를 List로 묶음
+        List<Article> createdList = articleService.createArticles(dtos);
+        return (createdList != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createdList) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
 }
