@@ -40,34 +40,20 @@ public class ArticleApiController {
                 ResponseEntity.status(HttpStatus.OK).body(created) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-    /*
+
     // PATCH (수정)
     @PatchMapping("api/articles/{id}")
     // 매개변수로 요청 url의 id 와 요청 메세지의 본문 데이터 받아오기
     // 반환하는 데이터에 상태 코드도 실어 보내기 위해 반환형을 ResponseEntity로 함.
     // ResponseEntity: REST API의 응답을 위해 사용하는 클래스. HTTP 상태 코드, 헤더, 본문을 실어 보낼 수 있음.
     public ResponseEntity<Article> update(@PathVariable Long id, @RequestBody ArticleForm dto) {
-
-        // 1. dto -> entity 변환
-        Article article = dto.toEntity();
-        log.info("id: {}, article: {}", id, article.toString());
-
-        // 2. 타깃 조회
-        Article target = articleRepository.findById(id).orElse(null);
-
-        // 3. 잘못된 요청 처리
-        if(target == null || id != article.getId()) { // 대상 엔티티가 없거나, 수정 요청 id와 본문 id가 다를 경우
-            log.info("잘못된 요청! id: {}, article: {}", id, article.toString());
-            // HttpStatus: HTTP 상태 코드를 관리하는 클래스
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 반환할 데이터가 없으므로 null
-        }
-
-        // 4. 업데이트 및 정상 응답(200)
-        target.patch(article); // 기존 데이터에 새 데이터 붙이기
-        Article updated = articleRepository.save(target); // 수정 내용 db에 최종 저장
-        return ResponseEntity.status(HttpStatus.OK).body(updated); // 본문에는 반환할 데이터를 싣는다
+        Article updated = articleService.update(id, dto); // 서비스를 통해 게시글 수정
+        return (updated != null) ? // 수정되면 정상, 안 되면 오류 응답
+                ResponseEntity.status(HttpStatus.OK).body(updated) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    /*
     // DELETE
     @DeleteMapping("api/articles/{id}")
     public ResponseEntity<Article> delete(@PathVariable Long id) {
