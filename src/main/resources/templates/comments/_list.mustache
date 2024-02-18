@@ -14,6 +14,10 @@
                         data-bs-article-id="{{article}}">
                     수정
                 </button>
+                <!-- 댓글 삭제 버튼 -->
+                <button type="button"
+                        class="btn btn-sm btn-outline-danger comment-delete-btn"
+                        data-comment-id="{{id}}">삭제</button>
             </div>
             <div class="card-body"> <!-- 댓글 본문 영역 설정 -->
                 {{body}} <!-- 댓글 본문 보여주기 -->
@@ -99,6 +103,42 @@
                 const msg = (response.ok) ? "댓글이 수정되었습니다." : "댓글 수정 실패!";
                 alert(msg);
                 window.location.reload();
+            });
+        });
+    }
+</script>
+
+<!-- 댓글 삭제 -->
+<script>
+    {
+        // 삭제 버튼 선택 (맨 처음 나온 버튼만 선택되기 때문에 querySelectorAll 사용
+        const commentDeleteBtns = document.querySelectorAll(".comment-delete-btn");
+        // 삭제 버튼 이벤트 처리
+        commentDeleteBtns.forEach(btn => { // 삭제 버튼 수만큼 반복
+            btn.addEventListener("click", (event) => { // 각 버튼의 이벤트 처리
+                const commentDeleteBtn = event.target; // 삭제 버튼 변수화
+                // 삭제 댓글 id 가져오기
+                const commentId = commentDeleteBtn.getAttribute("data-comment-id");
+                console.log(`삭제 버튼 클릭: ${commentId}번 댓글`);
+
+                // 삭제 REST API 호출
+                const url = `/api/comments/${commentId}`;
+                fetch(url, {
+                    method: "DELETE",
+                }).then(response => {
+                    // 댓글 삭제 실패 처리
+                    if(!response.ok) {
+                        alert("댓글 삭제 실패!");
+                        return;
+                    }
+                    // 삭제 성공 시 댓글을 화면에서 지우고 메시지 창 띄우기
+                    const target = document.querySelector(`#comments-${commentId}`);
+                    target.remove();
+                    const msg = `${commentId}번 댓글을 삭제했습니다.`;
+                    alert(msg);
+
+                    window.location.reload();
+                });
             });
         });
     }
